@@ -103,63 +103,67 @@ char	**ft_split(char const *s, char c)
 
 
     // write a struct to perfome actions with my stack
-    typedef struct s_stack
-{
-    int     *stack;
-    int     top;
-    int     size;
-}   t_stack;
+typedef struct s_stack {
+    int *stack;
+    int top;
+    int size;
+} t_stack;
 
-t_stack	stabler(t_stack **astack, char **argv, int i)
-{
-	int j = 0;
-	int count = 0;
-	while (count <= i)
-	{
-		while (argv[count][j] != '\0')
-		{
-			(*astack)->stack[count] *= 10;
-			(*astack)->stack[count] = (argv[count][j] - 48);
-			j++;
-		}
-		count++;
-	}
-	return (astack);
+void stabler(t_stack *astack, char **argv, int i) {
+    int j = 0;
+    int count = 0;
+
+    while (count < i) {
+        while (argv[count][j] != '\0') {
+            astack->stack[count] *= 10;
+			astack->stack[count] += (argv[count][j] - 48);
+            j++;
+        }
+        count++;
+        j = 0; // Reset j for the next string
+    }
 }
 
-t_stack *stopfer(t_stack **astack, char **argv)
-{
-	int i = 0;
-	while (argv[i])
-		i++;
-	if (!i)
-		return NULL;
-	*astack = (t_stack*)malloc(sizeof(t_stack));
-	if (!astack)
-		return NULL;
-	(*astack)->stack = malloc(sizeof(int) * i);
-	if ((*astack)->stack == NULL);
-	{
-		free((*astack)->stack);
-		return NULL;
-	}
-	stabler(astack, argv, i);
-	return (astack);
+t_stack *stopfer(char **argv) {
+    int i = 0;
+    while (argv[i])
+        i++;
+    if (!i)
+        return NULL;
+
+    t_stack *astack = (t_stack *)malloc(sizeof(t_stack));
+    if (!astack)
+        return NULL;
+
+    astack->stack = malloc(sizeof(int) * i);
+    if (!astack->stack) {
+        free(astack);
+        return NULL;
+    }
+
+    astack->top = -1; // Initialize top
+    astack->size = i;
+
+    stabler(astack, argv, i);
+    return astack;
 }
 
-int main(int argc, char **argv)
-{
-    if (1 == argc || (2 == argc && ! argv[1][0]))
+int main(int argc, char **argv) {
+    if (1 == argc || (2 == argc && !argv[1][0]))
         return 1;
     else if (2 == argc)
         argv = ft_split(argv[1], ' ');
-	t_stack *bstack = NULL;
-	t_stack *astack = stopfer(astack, argv);
-    int i = 0;
-    while (astack->stack[i])
-    {
-        printf("%d\n", astack->stack[i]);
-        i++;
+
+    t_stack *bstack = NULL;
+    t_stack *astack = stopfer(argv);
+
+    if (astack) {
+        int i = 0;
+        while (astack->stack[i]) {
+            printf("%d\n", astack->stack[i]);
+            i++;
+        }
     }
-    return (0);
+
+    return 0;
 }
