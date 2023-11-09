@@ -100,6 +100,64 @@ char	**ft_split(char const *s, char c)
 	return (res);
 }
 
+size_t	ft_strlen(const char *str)
+{
+	int	len;
+
+	len = 0;
+	while (*str != '\0')
+	{
+		str++;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_strdup(const char *s)
+{
+	int		len;
+	char	*ptr;
+	int		i;
+
+	i = 0;
+	len = ft_strlen(s);
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	if (!ptr)
+		return (NULL);
+	while (s[i] != '\0')
+	{
+		ptr[i] = s[i];
+		i++;
+	}
+	ptr[len] = '\0';
+	return (ptr);
+}
+
+char **notsplit(char **s, int argc)
+{
+	int i = (argc - 2);
+	char **argv;
+
+	argv = (char **)malloc(argc * sizeof(char *));
+	if (!argv)
+	{
+		free(argv);
+		return 0;
+	}
+
+	argc--;
+	while (i >= 0)
+	{
+		argv[i] = ft_strdup(s[argc]);
+		i--;
+		argc--;
+	}
+	argv[argc - 1] = NULL;
+
+	return argv;
+	
+}
+
 
 
     // write a struct to perfome actions with my stack
@@ -153,6 +211,8 @@ int main(int argc, char **argv) {
         return 1;
     else if (2 == argc)
         argv = ft_split(argv[1], ' ');
+	else
+		argv = notsplit(argv, argc);
 
     t_stack *bstack = NULL;
     t_stack *astack = stopfer(argv);
