@@ -241,31 +241,85 @@ int	ft_strcmp(int s1, int s2)
 	return (s1 - s2);
 }
 
-int *normalizer(t_stack *stack)
-{
-	int	i;
-	int	count;
-	int	sort;
+// int *normalizer(t_stack *stack)
+// {
+// 	int	i;
+// 	int	count;
+// 	int	sort;
 
-	count = stack->size;
-	sort = 0;
-	while (!sort)
+// 	count = stack->size;
+// 	sort = 0;
+// 	while (!sort)
+// 	{
+// 		sort = 1;
+// 		i = 0;
+// 		while (i < count)
+// 		{
+// 			if (ft_strcmp(stack->astack[i], stack->astack[i + 1]) > 0)
+// 			{
+// 				stack->astack[i] = (i + 1);
+// 				sort = 0;
+// 			}
+// 			i++;
+// 		}
+// 		count--;
+// 	}
+// 	return (stack->astack);
+// }
+
+void norm(t_stack *stack, int *cpy)
+{
+	int i = 0;
+	int j = 0;
+	while (i < stack->size)
 	{
-		sort = 1;
-		i = 0;
-		while (i < count)
+		j = 0;
+		while (j < stack->size)
 		{
-			if (ft_strcmp(stack->astack[i], stack->astack[i + 1]) > 0)
+			if (stack->bstack[i] == cpy[j])
 			{
-				stack->astack[i] = (i + 1);
-				sort = 0;
+				stack->astack[j] = (i + 1);
+				break;
 			}
-			i++;
+			j++;
 		}
-		count--;
+		i++;
 	}
-	return (stack->astack);
 }
+
+void normalizer(t_stack *stack)
+{
+	int i = 0;
+	int j = 0;
+	int tmp = 0;
+	int *cpy = malloc(sizeof(int) * stack->size); // muss anders kopiert werden
+	cpy = stack->astack;
+	while (i < (stack->size - 1))
+	{
+		j = (i + 1);
+		while (j < stack->size)
+		{
+			if (cpy[i] > cpy[j])
+			{
+				tmp = cpy[i];
+				cpy[i] = cpy[j];
+				cpy[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+	// if (cpy) {
+    //     int i = 0;
+    //     while (cpy[i]) {
+    //         printf("%d\n", cpy[i]);
+    //         i++;
+    //     }
+    // }
+	norm(stack, cpy);
+}
+
+
 
 void stabler(t_stack *stack, char **argv, int i) {
     int j = 0;
@@ -284,7 +338,7 @@ void stabler(t_stack *stack, char **argv, int i) {
     }
 	if (doublechecker(stack->astack))
 		rid(stack);
-	stack->astack = normalizer(stack);
+	normalizer(stack);
 }
 
 t_stack *stopfer(char **argv) {
@@ -298,8 +352,8 @@ t_stack *stopfer(char **argv) {
     if (!stack)
         return NULL; 
     stack->astack = malloc(sizeof(int) * i);
-    stack->astack = malloc(sizeof(int) * i);
-    if (!stack->astack || !stack->astack) {
+    stack->bstack = malloc(sizeof(int) * i);
+    if (!stack->astack || !stack->bstack) {
         free(stack); // rid instead?
         return NULL;
     }
