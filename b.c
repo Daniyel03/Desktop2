@@ -175,6 +175,36 @@ void rid(t_stack *stack)
 	exit(EXIT_FAILURE);
 }
 
+void	ft_aswap(t_stack *stack)
+{
+	int temp1;
+	int temp2;
+
+	printf("first %d\n", stack->astack[stack->atop - 3]);
+	temp1 = stack->astack[stack->atop - 1];
+	temp2 = stack->astack[stack->atop - 2];
+	stack->astack[stack->atop - 1] = temp2;
+	stack->astack[stack->atop - 2] = temp1;
+}
+
+int sa(t_stack *stack)
+{
+	if (stack->atop < 2)
+		return 0;
+	ft_aswap(stack);
+	return 1;
+}
+
+// int sa(t_stack *stack)
+// {
+// 	int tmp;
+// 	if (stack->atop < 2)
+// 		return 0;
+// 	tmp = stack->astack[stack->atop];
+// 	stack->astack[stack->atop] = stack->astack[stack->atop - 1];
+// 	stack->astack[]
+// }
+
 int full(t_stack *stack, int top)
 {
 	if (stack->size == top)
@@ -182,7 +212,6 @@ int full(t_stack *stack, int top)
 	else
 		return 0;
 }
-
 
 int doublechecker(int *num)
 {
@@ -253,6 +282,18 @@ void norm(t_stack *stack, int *sorted)
 	cpy = NULL;
 }
 
+int sorted(t_stack *stack)
+{
+	int i = 0;
+	while (i < (stack->size - 1))
+	{
+		if (!(ft_strcmp(stack->astack[i], stack->astack[i + 1]) == -1))
+			return 0;
+		i++;
+	}
+	return 1;
+}
+
 void normalizer(t_stack *stack)
 {	
 	int i = 0;
@@ -265,7 +306,7 @@ void normalizer(t_stack *stack)
 		rid(stack);
 	}
 	cpy = cpyarr(stack->astack, cpy);
-	while (i < (stack->size - 1))
+	while (i < (stack->size - 1))		// bubble sort
 	{
 		j = (i + 1);
 		while (j < stack->size)
@@ -312,13 +353,7 @@ void stabler(t_stack *stack, char **argv, int i) {
     }
 	if (doublechecker(stack->astack))
 		rid(stack);
-	    if (stack) {
-        int i = 0;
-        while (stack->astack[i]) {
-            printf("%d\n", stack->astack[i]);
-            i++;
-        }
-    }
+
 
 	normalizer(stack);
 }
@@ -339,7 +374,7 @@ t_stack *stopfer(char **argv) {
         free(stack); // rid instead?
         return NULL;
     }
-    stack->atop = 0; 
+    stack->atop = i; 
     stack->btop = 0; 
     stack->size = i;
     stabler(stack, argv, i);
@@ -358,6 +393,7 @@ int main(int argc, char **argv) {
 
     t_stack *stack;
 	stack = stopfer(argv);
+
     if (stack) {
         int i = 0;
         while (stack->astack[i]) {
@@ -365,6 +401,19 @@ int main(int argc, char **argv) {
             i++;
         }
     }
+
+	sa(stack);
+
+    if (stack) {
+        int i = 0;
+        while (stack->astack[i]) {
+            printf("%d\n", stack->astack[i]);
+            i++;
+        }
+    }
+
+	if(sorted(stack))
+		printf("sorted\n");
 
     return 0;
 }
