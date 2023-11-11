@@ -179,11 +179,11 @@ void	ft_aswap(t_stack *stack)
 {
 	int temp1;
 	int temp2;
-
-	temp1 = stack->astack[stack->atop - 2];
-	temp2 = stack->astack[stack->atop - 3];
-	stack->astack[stack->atop - 2] = temp2;
-	stack->astack[stack->atop - 3] = temp1;
+	
+	temp1 = stack->astack[stack->atop];
+	temp2 = stack->astack[stack->atop - 1];
+	stack->astack[stack->atop] = temp2;
+	stack->astack[stack->atop - 1] = temp1;
 }
 
 void	ft_bswap(t_stack *stack)
@@ -355,10 +355,10 @@ void normalizer(t_stack *stack)
 
 void stabler(t_stack *stack, char **argv, int i) {
     int j = 0;
-    int count = (stack->size - 1);
+    int count = 0;
 	int mark = 0;
 
-    while (count >= 0) {
+    while (count < (stack->size)) {
         while (argv[count][j] != '\0') {
 			if (!(argv[count][j] >= '0' && argv[count][j] <= '9' || argv[count][j] == '-'))
 				rid(stack);
@@ -374,21 +374,11 @@ void stabler(t_stack *stack, char **argv, int i) {
             j++;
         	mark = 0;
 		}
-		count--;
+		count++;
         j = 0; 
     }
 	if (doublechecker(stack->astack))
 		rid(stack);
-	
-if (stack) {
-        int i = 0;
-        while (stack->astack[i]) {
-            printf("%d\n", stack->astack[i]);
-            i++;
-        }
-    }
-    
-
 
 	normalizer(stack);
 }
@@ -409,7 +399,7 @@ t_stack *stopfer(char **argv) {
         free(stack); // rid instead?
         return NULL;
     }
-    stack->atop = i; 
+    stack->atop = i - 1; 
     stack->btop = 0; 
     stack->size = i;
     stabler(stack, argv, i);
@@ -440,10 +430,10 @@ int main(int argc, char **argv) {
 	sa(stack);
 
     if (stack) {
-        int i = 0;
+        int i = stack->atop;
         while (stack->astack[i]) {
             printf("%d\n", stack->astack[i]);
-            i++;
+            i--;
         }
     }
 
