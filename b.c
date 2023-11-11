@@ -184,36 +184,6 @@ int full(t_stack *stack, int top)
 }
 
 
-
-// int empty(t_stack *stack, int top)		stattdessen if(stack->a/btop == 0)
-// {
-// 	if (stack->top == 0)
-// 		return 1;
-// 	else
-// 		return 0;
-// }
-
-// int doublechecker(int *num)
-// {
-// 	int i = 0;
-// 	int j = 0;
-// 	int count = 0;
-// 	while(num[i])
-// 	{
-// 		j = 0;
-// 		count = 0;
-// 		while(num[j])
-// 		{
-// 			if (num[i] == num[j++])
-// 				count++;
-// 			if (count >= 2)
-// 				return 1;
-// 		}
-// 		i++;
-// 	}
-// 	return 0;
-// }
-
 int doublechecker(int *num)
 {
 	int i = 0;
@@ -241,42 +211,36 @@ int	ft_strcmp(int s1, int s2)
 	return (s1 - s2);
 }
 
-// int *normalizer(t_stack *stack)
-// {
-// 	int	i;
-// 	int	count;
-// 	int	sort;
 
-// 	count = stack->size;
-// 	sort = 0;
-// 	while (!sort)
-// 	{
-// 		sort = 1;
-// 		i = 0;
-// 		while (i < count)
-// 		{
-// 			if (ft_strcmp(stack->astack[i], stack->astack[i + 1]) > 0)
-// 			{
-// 				stack->astack[i] = (i + 1);
-// 				sort = 0;
-// 			}
-// 			i++;
-// 		}
-// 		count--;
-// 	}
-// 	return (stack->astack);
-// }
+int	*cpyarr(int *arr, int *cpy)
+{
+	int i = 0;
+	while (arr[i])
+	{
+		cpy[i] = arr[i];
+		i++;
+	}
+	return cpy;
+}
 
-void norm(t_stack *stack, int *cpy)
+void norm(t_stack *stack, int *sorted)
 {
 	int i = 0;
 	int j = 0;
+	int *cpy = malloc(sizeof(int) * stack->size);
+	if (!cpy)
+	{
+		free(cpy);
+		rid(stack);
+	}
+	cpy = cpyarr(stack->astack, cpy);
+
 	while (i < stack->size)
 	{
 		j = 0;
 		while (j < stack->size)
 		{
-			if (stack->bstack[i] == cpy[j])
+			if (sorted[i] == cpy[j])
 			{
 				stack->astack[j] = (i + 1);
 				break;
@@ -285,15 +249,22 @@ void norm(t_stack *stack, int *cpy)
 		}
 		i++;
 	}
+	free(cpy);
+	cpy = NULL;
 }
 
 void normalizer(t_stack *stack)
-{
+{	
 	int i = 0;
 	int j = 0;
 	int tmp = 0;
-	int *cpy = malloc(sizeof(int) * stack->size); // muss anders kopiert werden
-	cpy = stack->astack;
+	int *cpy = malloc(sizeof(int) * stack->size);
+	if (!cpy)
+	{
+		free(cpy);
+		rid(stack);
+	}
+	cpy = cpyarr(stack->astack, cpy);
 	while (i < (stack->size - 1))
 	{
 		j = (i + 1);
@@ -309,35 +280,46 @@ void normalizer(t_stack *stack)
 		}
 		i++;
 	}
-	// if (cpy) {
-    //     int i = 0;
-    //     while (cpy[i]) {
-    //         printf("%d\n", cpy[i]);
-    //         i++;
-    //     }
-    // }
+
 	norm(stack, cpy);
+	free(cpy);
+	cpy = NULL;
 }
-
-
 
 void stabler(t_stack *stack, char **argv, int i) {
     int j = 0;
     int count = 0;
+	int mark = 0;
 
     while (count < i) {
         while (argv[count][j] != '\0') {
-            stack->astack[count] *= 10;
-			stack->astack[count] += (argv[count][j] - 48);
-			if (!(argv[count][j] >= '0' && argv[count][j] <= '9'))
+			if (!(argv[count][j] >= '0' && argv[count][j] <= '9' || argv[count][j] == '-'))
 				rid(stack);
+			if (argv[count][j] == '-')
+			{
+				j++;
+				mark = 1;
+			}
+			stack->astack[count] *= 10;
+			stack->astack[count] += (argv[count][j] - 48);
+			if(mark)
+				stack->astack[count] *= -1;
             j++;
-        }
+        	mark = 0;
+		}
         count++;
         j = 0; 
     }
 	if (doublechecker(stack->astack))
 		rid(stack);
+	    if (stack) {
+        int i = 0;
+        while (stack->astack[i]) {
+            printf("%d\n", stack->astack[i]);
+            i++;
+        }
+    }
+
 	normalizer(stack);
 }
 
@@ -376,7 +358,6 @@ int main(int argc, char **argv) {
 
     t_stack *stack;
 	stack = stopfer(argv);
-
     if (stack) {
         int i = 0;
         while (stack->astack[i]) {
