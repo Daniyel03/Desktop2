@@ -180,11 +180,21 @@ void	ft_aswap(t_stack *stack)
 	int temp1;
 	int temp2;
 
-	printf("first %d\n", stack->astack[stack->atop - 3]);
-	temp1 = stack->astack[stack->atop - 1];
-	temp2 = stack->astack[stack->atop - 2];
-	stack->astack[stack->atop - 1] = temp2;
-	stack->astack[stack->atop - 2] = temp1;
+	temp1 = stack->astack[stack->atop - 2];
+	temp2 = stack->astack[stack->atop - 3];
+	stack->astack[stack->atop - 2] = temp2;
+	stack->astack[stack->atop - 3] = temp1;
+}
+
+void	ft_bswap(t_stack *stack)
+{
+	int temp1;
+	int temp2;
+
+	temp1 = stack->bstack[stack->btop - 2];
+	temp2 = stack->bstack[stack->btop - 3];
+	stack->bstack[stack->btop - 2] = temp2;
+	stack->bstack[stack->btop - 3] = temp1;
 }
 
 int sa(t_stack *stack)
@@ -195,14 +205,30 @@ int sa(t_stack *stack)
 	return 1;
 }
 
-// int sa(t_stack *stack)
+int sb(t_stack *stack)
+{
+	if (stack->btop < 2)
+		return 0;
+	ft_bswap(stack);
+	return 1;
+}
+
+int ss(t_stack *stack)
+{
+	if (stack->atop < 2 || stack->btop < 2)
+		return 0;
+	ft_aswap(stack);
+	ft_bswap(stack);
+	return 1;
+}
+
+// int pb(t_stack *stack)
 // {
-// 	int tmp;
-// 	if (stack->atop < 2)
+// 	if(!stack->btop)
 // 		return 0;
-// 	tmp = stack->astack[stack->atop];
-// 	stack->astack[stack->atop] = stack->astack[stack->atop - 1];
-// 	stack->astack[]
+// 	int temp1;
+// 	int temp2;
+// 	temp1 = stack->astack[]
 // }
 
 int full(t_stack *stack, int top)
@@ -329,10 +355,10 @@ void normalizer(t_stack *stack)
 
 void stabler(t_stack *stack, char **argv, int i) {
     int j = 0;
-    int count = 0;
+    int count = (stack->size - 1);
 	int mark = 0;
 
-    while (count < i) {
+    while (count >= 0) {
         while (argv[count][j] != '\0') {
 			if (!(argv[count][j] >= '0' && argv[count][j] <= '9' || argv[count][j] == '-'))
 				rid(stack);
@@ -348,11 +374,20 @@ void stabler(t_stack *stack, char **argv, int i) {
             j++;
         	mark = 0;
 		}
-        count++;
+		count--;
         j = 0; 
     }
 	if (doublechecker(stack->astack))
 		rid(stack);
+	
+if (stack) {
+        int i = 0;
+        while (stack->astack[i]) {
+            printf("%d\n", stack->astack[i]);
+            i++;
+        }
+    }
+    
 
 
 	normalizer(stack);
