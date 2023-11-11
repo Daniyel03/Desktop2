@@ -179,7 +179,7 @@ void	ft_aswap(t_stack *stack)
 {
 	int temp1;
 	int temp2;
-	
+
 	temp1 = stack->astack[stack->atop];
 	temp2 = stack->astack[stack->atop - 1];
 	stack->astack[stack->atop] = temp2;
@@ -191,10 +191,10 @@ void	ft_bswap(t_stack *stack)
 	int temp1;
 	int temp2;
 
-	temp1 = stack->bstack[stack->btop - 2];
-	temp2 = stack->bstack[stack->btop - 3];
-	stack->bstack[stack->btop - 2] = temp2;
-	stack->bstack[stack->btop - 3] = temp1;
+	temp1 = stack->bstack[stack->btop];
+	temp2 = stack->bstack[stack->btop - 1];
+	stack->bstack[stack->btop] = temp2;
+	stack->bstack[stack->btop - 1] = temp1;
 }
 
 int sa(t_stack *stack)
