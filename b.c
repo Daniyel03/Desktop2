@@ -175,6 +175,14 @@ void rid(t_stack *stack)
 	exit(EXIT_FAILURE);
 }
 
+int full(t_stack *stack, int top)
+{
+	if (stack->size == top)
+		return 1;
+	else
+		return 0;
+}
+
 void	ft_aswap(t_stack *stack)
 {
 	int temp1;
@@ -199,7 +207,7 @@ void	ft_bswap(t_stack *stack)
 
 int sa(t_stack *stack)
 {
-	if (stack->atop < 2)
+	if (stack->atop < 1)
 		return 0;
 	ft_aswap(stack);
 	return 1;
@@ -207,7 +215,7 @@ int sa(t_stack *stack)
 
 int sb(t_stack *stack)
 {
-	if (stack->btop < 2)
+	if (stack->btop < 1)
 		return 0;
 	ft_bswap(stack);
 	return 1;
@@ -215,28 +223,147 @@ int sb(t_stack *stack)
 
 int ss(t_stack *stack)
 {
-	if (stack->atop < 2 || stack->btop < 2)
+	if (stack->atop < 1 || stack->btop < 1)
 		return 0;
 	ft_aswap(stack);
 	ft_bswap(stack);
 	return 1;
 }
 
-// int pb(t_stack *stack)
-// {
-// 	if(!stack->btop)
-// 		return 0;
-// 	int temp1;
-// 	int temp2;
-// 	temp1 = stack->astack[]
-// }
-
-int full(t_stack *stack, int top)
+int pb(t_stack *stack)
 {
-	if (stack->size == top)
-		return 1;
-	else
+	if(!stack->astack || full(stack, stack->btop))
 		return 0;
+	int temp1;
+	int one = (stack->btop + 1);
+	temp1 = stack->astack[stack->atop];
+	stack->bstack[stack->btop + 1] = temp1;
+	stack->btop = one;
+	one = (stack->atop - 1);
+	stack->atop = one;
+	return 1;
+}
+
+int pa(t_stack *stack)
+{
+	if(!stack->bstack || full(stack, stack->atop))
+		return 0;
+	int temp1;
+	int one = (stack->atop + 1);
+	temp1 = stack->bstack[stack->btop];
+	stack->astack[stack->atop + 1] = temp1;
+	stack->atop = one;
+	one = (stack->btop - 1);
+	stack->btop = one;
+	return 1;
+}
+
+int ra(t_stack *stack)
+{
+	int temp1;
+	int temp2;
+	int count = stack->atop;
+	if (stack->atop < 1)
+		return 0;
+	while(count > 0)
+	{
+		temp1 = stack->astack[count];
+		temp2 = stack->astack[count - 1];
+		stack->astack[count] = temp2;
+		stack->astack[count - 1] = temp1;
+		count--;
+	}
+	return 1;
+}
+
+int rb(t_stack *stack)
+{
+	int temp1;
+	int temp2;
+	int count = stack->btop;
+	if (stack->btop < 1)
+		return 0;
+	while(count > 0)
+	{
+		temp1 = stack->bstack[count];
+		temp2 = stack->bstack[count - 1];
+		stack->bstack[count] = temp2;
+		stack->bstack[count - 1] = temp1;
+		count--;
+	}
+	return 1;
+}
+
+int rr(t_stack *stack)
+{
+	if (stack->atop < 1 || stack->btop < 1)
+		return 0;
+	rb(stack);
+	ra(stack);
+	return 1;
+}
+
+int rra(t_stack *stack)
+{
+	int temp1;
+	int temp2;
+	int count = 0;
+	if (stack->atop < 1)
+		return 0;
+	while(count < stack->atop)
+	{
+		temp1 = stack->astack[count];
+		temp2 = stack->astack[count + 1];
+		stack->astack[count] = temp2;
+		stack->astack[count + 1] = temp1;
+		count++;
+	}
+	return 1;
+}
+
+int rrb(t_stack *stack)
+{
+	int temp1;
+	int temp2;
+	int count = 0;
+	if (stack->btop < 1)
+		return 0;
+	while(count < stack->btop)
+	{
+		temp1 = stack->bstack[count];
+		temp2 = stack->bstack[count + 1];
+		stack->bstack[count] = temp2;
+		stack->bstack[count + 1] = temp1;
+		count++;
+	}
+	return 1;
+}
+
+int rrr(t_stack *stack)
+{
+	if (stack->atop < 1 || stack->btop < 1)
+		return 0;
+	rrb(stack);
+	rra(stack);
+	return 1;
+}
+
+void three(t_stack *stack)
+{
+	if(stack->astack[0] == 2 && stack->astack[1] == 3 && stack->astack[2] == 1)
+		ra(stack);
+	if(stack->astack[0] == 3 && stack->astack[1] == 1 && stack->astack[2] == 2)
+		rra(stack);
+	if(stack->astack[0] == 1 && stack->astack[1] == 3 && stack->astack[2] == 2)
+		sa(stack);
+	if(stack->astack[0] == 2 && stack->astack[1] == 1 && stack->astack[2] == 3)
+	{
+		rra(stack);
+		sa(stack);
+	}
+	if(stack->astack[0] == 3 && stack->astack[1] == 2 && stack->astack[2] == 1)
+		ra;
+		sa;
 }
 
 int doublechecker(int *num)
@@ -406,6 +533,15 @@ t_stack *stopfer(char **argv) {
     return stack;
 }
 
+	int sorter(t_stack *stack)
+	{
+		if (stack->atop == 1)
+			sa(stack);
+		if (stack->atop == 2)
+			three(stack);
+		return 1;	
+	}
+
 int main(int argc, char **argv) {
     if (1 == argc || (2 == argc && !argv[1][0]))
         return 1;
@@ -420,14 +556,20 @@ int main(int argc, char **argv) {
 	stack = stopfer(argv);
 
     if (stack) {
-        int i = 0;
+        int i = stack->atop;
         while (stack->astack[i]) {
             printf("%d\n", stack->astack[i]);
-            i++;
+            i--;
         }
     }
 
-	sa(stack);
+	if(sorted(stack))
+	{
+		printf("already sorted\n");
+		return 0;
+	}
+	else
+		sorter(stack);
 
     if (stack) {
         int i = stack->atop;
@@ -437,8 +579,13 @@ int main(int argc, char **argv) {
         }
     }
 
+// 
 	if(sorted(stack))
 		printf("sorted\n");
+	// else
+	// 	printf("fail\n");
 
     return 0;
 }
+
+// all possible combinations for 3 digits plus one solution like 1 3 2 = sa
