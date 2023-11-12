@@ -362,9 +362,12 @@ void three(t_stack *stack)
 		sa(stack);
 	}
 	if(stack->astack[0] == 3 && stack->astack[1] == 2 && stack->astack[2] == 1)
-		ra;
-		sa;
+	{
+		ra(stack);
+		sa(stack);
+	}
 }
+
 
 int doublechecker(int *num)
 {
@@ -539,6 +542,8 @@ t_stack *stopfer(char **argv) {
 			sa(stack);
 		if (stack->atop == 2)
 			three(stack);
+		if (stack->atop == 3)
+			four(stack);
 		return 1;	
 	}
 
@@ -571,6 +576,8 @@ int main(int argc, char **argv) {
 	else
 		sorter(stack);
 
+	printf("\n");
+
     if (stack) {
         int i = stack->atop;
         while (stack->astack[i]) {
@@ -582,10 +589,8 @@ int main(int argc, char **argv) {
 // 
 	if(sorted(stack))
 		printf("sorted\n");
-	// else
-	// 	printf("fail\n");
+	else
+		printf("fail\n");
 
     return 0;
 }
-
-// all possible combinations for 3 digits plus one solution like 1 3 2 = sa
