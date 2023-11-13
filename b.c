@@ -232,13 +232,13 @@ int ss(t_stack *stack)
 
 int pb(t_stack *stack)
 {
-	if(!stack->astack || full(stack, stack->btop))
+	if(stack->atop == -1 || full(stack, stack->btop))
 		return 0;
 	int temp1;
 	int one = (stack->btop + 1);
-	temp1 = stack->astack[stack->atop];
-	stack->bstack[stack->btop + 1] = temp1;
 	stack->btop = one;
+	temp1 = stack->astack[stack->atop];
+	stack->bstack[stack->btop] = temp1;
 	one = (stack->atop - 1);
 	stack->atop = one;
 	return 1;
@@ -246,7 +246,7 @@ int pb(t_stack *stack)
 
 int pa(t_stack *stack)
 {
-	if(!stack->bstack || full(stack, stack->atop))
+	if(stack->btop == -1 || full(stack, stack->atop))
 		return 0;
 	int temp1;
 	int one = (stack->atop + 1);
@@ -348,6 +348,41 @@ int rrr(t_stack *stack)
 	return 1;
 }
 
+int	ft_strcmp(int s1, int s2)
+{
+	while (s1 == s2 && s1)
+	{
+		s1++;
+		s2++;
+	}
+	return (s1 - s2);
+}
+
+
+int asorted(t_stack *stack)
+{
+	int i = 0;
+	while (i < stack->atop)
+	{
+		if (!(ft_strcmp(stack->astack[i], stack->astack[i + 1]) == -1))
+			return 0;
+		i++;
+	}
+	return 1;
+}
+
+int bsorted(t_stack *stack)
+{
+	int i = 0;
+	while (i < stack->btop)
+	{
+		if (!(ft_strcmp(stack->bstack[i], stack->bstack[i + 1]) == -1))
+			return 0;
+		i++;
+	}
+	return 1;
+}
+
 void three(t_stack *stack)
 {
 	if(stack->astack[0] == 2 && stack->astack[1] == 3 && stack->astack[2] == 1)
@@ -368,6 +403,39 @@ void three(t_stack *stack)
 	}
 }
 
+void four(t_stack *stack)
+{
+	pb(stack);
+	pb(stack);
+	if (bsorted(stack))
+		sb(stack);
+	if (!asorted(stack))
+		sa(stack);
+	pa(stack);
+	pa(stack);
+}
+
+void five(t_stack *stack)
+{
+	int count = 0;
+
+	while (count != 2)
+	{
+		if (stack->astack[stack->atop] == 4 || stack->astack[stack->atop] == 5)
+		{
+			pb(stack);
+			count++;
+		}
+		if (count == 2)
+			break ;
+		rra(stack);
+	}
+	if (bsorted(stack))
+		sb(stack);
+	three(stack);
+	pa(stack);
+	pa(stack);
+}
 
 int doublechecker(int *num)
 {
@@ -386,16 +454,6 @@ int doublechecker(int *num)
 	return 0;
 }
 
-int	ft_strcmp(int s1, int s2)
-{
-	while (s1 == s2 && s1)
-	{
-		s1++;
-		s2++;
-	}
-	return (s1 - s2);
-}
-
 
 int	*cpyarr(int *arr, int *cpy)
 {
@@ -407,6 +465,7 @@ int	*cpyarr(int *arr, int *cpy)
 	}
 	return cpy;
 }
+
 
 void norm(t_stack *stack, int *sorted)
 {
@@ -436,18 +495,6 @@ void norm(t_stack *stack, int *sorted)
 	}
 	free(cpy);
 	cpy = NULL;
-}
-
-int sorted(t_stack *stack)
-{
-	int i = 0;
-	while (i < (stack->size - 1))
-	{
-		if (!(ft_strcmp(stack->astack[i], stack->astack[i + 1]) == -1))
-			return 0;
-		i++;
-	}
-	return 1;
 }
 
 void normalizer(t_stack *stack)
@@ -530,7 +577,7 @@ t_stack *stopfer(char **argv) {
         return NULL;
     }
     stack->atop = i - 1; 
-    stack->btop = 0; 
+    stack->btop = -1; 
     stack->size = i;
     stabler(stack, argv, i);
     return stack;
@@ -544,6 +591,8 @@ t_stack *stopfer(char **argv) {
 			three(stack);
 		if (stack->atop == 3)
 			four(stack);
+		if (stack->atop == 4)
+			five(stack);
 		return 1;	
 	}
 
@@ -568,9 +617,9 @@ int main(int argc, char **argv) {
         }
     }
 
-	if(sorted(stack))
+	if(asorted(stack))
 	{
-		printf("already sorted\n");
+		printf("already asorted\n");
 		return 0;
 	}
 	else
@@ -587,7 +636,7 @@ int main(int argc, char **argv) {
     }
 
 // 
-	if(sorted(stack))
+	if(asorted(stack))
 		printf("sorted\n");
 	else
 		printf("fail\n");
