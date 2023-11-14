@@ -207,6 +207,7 @@ void	ft_bswap(t_stack *stack)
 
 int sa(t_stack *stack)
 {
+	printf("sa\n");
 	if (stack->atop < 1)
 		return 0;
 	ft_aswap(stack);
@@ -215,6 +216,7 @@ int sa(t_stack *stack)
 
 int sb(t_stack *stack)
 {
+	printf("sb\n");
 	if (stack->btop < 1)
 		return 0;
 	ft_bswap(stack);
@@ -223,6 +225,7 @@ int sb(t_stack *stack)
 
 int ss(t_stack *stack)
 {
+	printf("ss\n");
 	if (stack->atop < 1 || stack->btop < 1)
 		return 0;
 	ft_aswap(stack);
@@ -232,6 +235,7 @@ int ss(t_stack *stack)
 
 int pb(t_stack *stack)
 {
+	printf("pb\n");
 	if(stack->atop == -1 || full(stack, stack->btop))
 		return 0;
 	int temp1;
@@ -246,6 +250,7 @@ int pb(t_stack *stack)
 
 int pa(t_stack *stack)
 {
+	printf("pa\n");
 	if(stack->btop == -1 || full(stack, stack->atop))
 		return 0;
 	int temp1;
@@ -260,6 +265,7 @@ int pa(t_stack *stack)
 
 int ra(t_stack *stack)
 {
+	printf("ra\n");
 	int temp1;
 	int temp2;
 	int count = stack->atop;
@@ -278,6 +284,7 @@ int ra(t_stack *stack)
 
 int rb(t_stack *stack)
 {
+	printf("rb\n");
 	int temp1;
 	int temp2;
 	int count = stack->btop;
@@ -296,6 +303,7 @@ int rb(t_stack *stack)
 
 int rr(t_stack *stack)
 {
+	printf("rr\n");
 	if (stack->atop < 1 || stack->btop < 1)
 		return 0;
 	rb(stack);
@@ -305,6 +313,7 @@ int rr(t_stack *stack)
 
 int rra(t_stack *stack)
 {
+	printf("ra\n");
 	int temp1;
 	int temp2;
 	int count = 0;
@@ -323,6 +332,7 @@ int rra(t_stack *stack)
 
 int rrb(t_stack *stack)
 {
+	printf("rrb\n");
 	int temp1;
 	int temp2;
 	int count = 0;
@@ -341,6 +351,7 @@ int rrb(t_stack *stack)
 
 int rrr(t_stack *stack)
 {
+	printf("rrr\n");
 	if (stack->atop < 1 || stack->btop < 1)
 		return 0;
 	rrb(stack);
@@ -413,6 +424,13 @@ void four(t_stack *stack)
 		sa(stack);
 	pa(stack);
 	pa(stack);
+	ra(stack);
+	if (!asorted(stack))
+	{
+	sa(stack);
+	rra(stack);
+	sa(stack);
+	}
 }
 
 void five(t_stack *stack)
@@ -436,6 +454,61 @@ void five(t_stack *stack)
 	pa(stack);
 	pa(stack);
 }
+
+void radix(t_stack *stack)
+{
+	printf("geht rein");
+	int i = 0;
+	int shift = 0;
+	int count = (stack->size / 2);
+	int temp;
+	while (shift < count)
+	{
+		i = 0;
+		while (i < (stack->size))
+		{
+			temp = stack->astack[0];
+			temp = temp >> shift;
+			if(!(temp&1))
+				pb(stack);
+			else
+				ra(stack);
+			i++;
+		}
+		while(stack->btop != -1)
+			pa(stack);
+		shift++;
+	}
+	temp = 0;
+}
+
+// void radix(t_stack *stack)
+// {
+//     int shift = 0;
+
+//     while (shift < (stack->size / 2))
+//     {
+//         int i = 0;
+
+//         while (i < stack->size)
+//         {
+//             int temp = stack->astack[0];
+//             int bit = (temp >> shift) & 1;
+
+//             if (bit == 0)
+//                 pb(stack);
+//             else
+//                 ra(stack);
+
+//             i++;
+//         }
+
+//         while (stack->btop != -1)
+//             pa(stack);
+
+//         shift++;
+//     }
+// }
 
 int doublechecker(int *num)
 {
@@ -587,16 +660,22 @@ t_stack *stopfer(char **argv) {
 	{
 		if (stack->atop == 1)
 			sa(stack);
-		if (stack->atop == 2)
+		else if (stack->atop == 2)
 			three(stack);
-		if (stack->atop == 3)
+		else if (stack->atop == 3)
 			four(stack);
-		if (stack->atop == 4)
+		else if (stack->atop == 4)
 			five(stack);
+		else
+		{
+			printf("geht rein");
+
+			radix(stack);
+		}
 		return 1;	
 	}
-
-int main(int argc, char **argv) {
+	
+	int main(int argc, char **argv) {
     if (1 == argc || (2 == argc && !argv[1][0]))
         return 1;
     else if (2 == argc)
@@ -617,13 +696,13 @@ int main(int argc, char **argv) {
         }
     }
 
-	if(asorted(stack))
-	{
-		printf("already asorted\n");
-		return 0;
-	}
-	else
-		sorter(stack);
+	// if(asorted(stack))
+	// {
+	// 	printf("already asorted\n");
+	// 	return 0;
+	// }
+	// else
+	// 	sorter(stack);
 
 	printf("\n");
 
