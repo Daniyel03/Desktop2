@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dscholz <dscholz@student.42vienna.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/17 16:48:16 by dscholz           #+#    #+#             */
+/*   Updated: 2023/11/17 16:48:56 by dscholz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -313,7 +326,7 @@ int rr(t_stack *stack)
 
 int rra(t_stack *stack)
 {
-	printf("ra\n");
+	printf("rra\n");
 	int temp1;
 	int temp2;
 	int count = 0;
@@ -375,7 +388,7 @@ int asorted(t_stack *stack)
 	int i = 0;
 	while (i < stack->atop)
 	{
-		if (!(ft_strcmp(stack->astack[i], stack->astack[i + 1]) == -1))
+		if (!(ft_strcmp(stack->astack[i], stack->astack[i + 1]) == 1))
 			return 0;
 		i++;
 	}
@@ -387,7 +400,7 @@ int bsorted(t_stack *stack)
 	int i = 0;
 	while (i < stack->btop)
 	{
-		if (!(ft_strcmp(stack->bstack[i], stack->bstack[i + 1]) == -1))
+		if (!(ft_strcmp(stack->bstack[i], stack->bstack[i + 1]) == 1))
 			return 0;
 		i++;
 	}
@@ -397,17 +410,17 @@ int bsorted(t_stack *stack)
 void three(t_stack *stack)
 {
 	if(stack->astack[2] == 2 && stack->astack[1] == 3 && stack->astack[0] == 1)
+		rra(stack);
+	else if(stack->astack[2] == 3 && stack->astack[1] == 1 && stack->astack[0] == 2)
 		ra(stack);
-	if(stack->astack[2] == 3 && stack->astack[1] == 1 && stack->astack[0] == 2)
-		rra(stack);
-	if(stack->astack[2] == 1 && stack->astack[1] == 3 && stack->astack[0] == 2)
-		sa(stack);
-	if(stack->astack[2] == 2 && stack->astack[1] == 1 && stack->astack[0] == 3)
+	else if(stack->astack[2] == 1 && stack->astack[1] == 3 && stack->astack[0] == 2)
 	{
-		rra(stack);
 		sa(stack);
+		ra(stack);
 	}
-	if(stack->astack[2] == 3 && stack->astack[1] == 2 && stack->astack[2] == 1)
+	else if(stack->astack[2] == 2 && stack->astack[1] == 1 && stack->astack[0] == 3)
+		sa(stack);
+	else if(stack->astack[2] == 3 && stack->astack[1] == 2 && stack->astack[0] == 1)
 	{
 		ra(stack);
 		sa(stack);
@@ -416,21 +429,12 @@ void three(t_stack *stack)
 
 void four(t_stack *stack)
 {
+	while (stack->astack[stack->atop] != 4)
+		rra(stack);
 	pb(stack);
-	pb(stack);
-	if (bsorted(stack))
-		sb(stack);
-	if (!asorted(stack))
-		sa(stack);
-	pa(stack);
+	three(stack);
 	pa(stack);
 	ra(stack);
-	if (!asorted(stack))
-	{
-	sa(stack);
-	rra(stack);
-	sa(stack);
-	}
 }
 
 void five(t_stack *stack)
@@ -453,13 +457,15 @@ void five(t_stack *stack)
 	three(stack);
 	pa(stack);
 	pa(stack);
+	ra(stack);
+	ra(stack);
 }
 
 int bits(int num) {
     int count = 0;
 
     while (num) {
-        count += num & 1;
+        count++;
         num >>= 1;
     }
 
@@ -468,7 +474,6 @@ int bits(int num) {
 
 void radix(t_stack *stack)
 {
-	printf("geht rein");
 	int i = 0;
 	int shift = 0;
 	int count = bits(stack->size);
@@ -486,13 +491,13 @@ void radix(t_stack *stack)
 				ra(stack);
 			i++;
 		}
-		    if (stack) {
-        int i = stack->btop;
-        while (stack->bstack[i]) {
-            printf("%d\n", stack->bstack[i]);
-            i--;
-        }
-    }
+	// 	    if (stack) {
+    //     int i = stack->btop;
+    //     while (stack->bstack[i]) {
+    //         printf("%d\n", stack->bstack[i]);
+    //         i--;
+    //     }
+    // }
 
 		while(stack->btop != -1)
 			pa(stack);
@@ -529,14 +534,15 @@ void radix(t_stack *stack)
 //     }
 // }
 
-int doublechecker(int *num)
+int doublechecker(int *num, t_stack *stack)
 {
 	int i = 0;
 	int j = 0;
-	while(num[i])
+	int count = stack->size;
+	while(i < count)
 	{
 		j = (i + 1);
-		while(num[j])
+		while(j < count)
 		{
 			if (num[i] == num[j++])
 				return 1;
@@ -547,10 +553,10 @@ int doublechecker(int *num)
 }
 
 
-int	*cpyarr(int *arr, int *cpy)
+int	*cpyarr(int *arr, int *cpy, int count)
 {
 	int i = 0;
-	while (arr[i])
+	while (i < count)
 	{
 		cpy[i] = arr[i];
 		i++;
@@ -569,7 +575,7 @@ void norm(t_stack *stack, int *sorted)
 		free(cpy);
 		rid(stack);
 	}
-	cpy = cpyarr(stack->astack, cpy);
+	cpy = cpyarr(stack->astack, cpy, stack->size);
 
 	while (i < stack->size)
 	{
@@ -600,7 +606,7 @@ void normalizer(t_stack *stack)
 		free(cpy);
 		rid(stack);
 	}
-	cpy = cpyarr(stack->astack, cpy);
+	cpy = cpyarr(stack->astack, cpy, stack->size);
 	while (i < (stack->size - 1))		// bubble sort
 	{
 		j = (i + 1);
@@ -622,6 +628,75 @@ void normalizer(t_stack *stack)
 	cpy = NULL;
 }
 
+// void stabler(t_stack *stack, char **argv, int i) {
+//     int j = 0;
+//     int count = 0;
+// 	int stackk = (stack->size - 1);
+// 	int mark = 0;
+
+//     while (count < (stack->size)) {
+//         while (argv[count][j] != '\0') {
+// 			if (!(argv[count][j] >= '0' && argv[count][j] <= '9' || argv[count][j] == '-'))
+// 				rid(stack);
+// 			if (argv[count][j] == '-')
+// 			{
+// 				j++;
+// 				mark = 1;
+// 			}
+// 			if (argv[count][j] == '0' && argv[count][j + 1] == '\0')
+// 			{
+// 				stack->astack[stackk] = 0;
+// 				break ;
+// 			}
+// 			stack->astack[stackk] *= 10;
+// 			stack->astack[stackk] += (argv[count][j] - 48);
+// 			if(mark)
+// 				stack->astack[stackk] *= -1;
+//             j++;
+//         	mark = 0;
+// 		}
+// 		count++;
+// 		stackk--;
+//         j = 0; 
+//     }
+// 	if (doublechecker(stack->astack, stack))
+// 	{
+// 		printf("erraten\n");
+// 		    if (stack) {
+//         int i = stack->atop;
+//         while (stack->astack[i]) {
+//             printf("%d\n", stack->astack[i]);
+//             i--;
+//         }
+//     }
+// 		rid(stack);
+// 	}normalizer(stack);
+// }
+
+int	ft_atoi(const char *str)
+{
+	int	res;
+	int	op;
+
+	res = 0;
+	op = 1;
+	while ((*str >= 9 && *str <= 13) || *str == 32)
+		str++;
+	if (*str == '+' || *str == '-')
+	{
+		if (*str == '-')
+			op = op * -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		res = res * 10;
+		res = res + (*str - 48);
+		str++;
+	}
+	return (op * res);
+}
+
 void stabler(t_stack *stack, char **argv, int i) {
     int j = 0;
     int count = 0;
@@ -629,29 +704,22 @@ void stabler(t_stack *stack, char **argv, int i) {
 	int mark = 0;
 
     while (count < (stack->size)) {
-        while (argv[count][j] != '\0') {
-			if (!(argv[count][j] >= '0' && argv[count][j] <= '9' || argv[count][j] == '-'))
-				rid(stack);
-			if (argv[count][j] == '-')
-			{
-				j++;
-				mark = 1;
-			}
-			stack->astack[stackk] *= 10;
-			stack->astack[stackk] += (argv[count][j] - 48);
-			if(mark)
-				stack->astack[stackk] *= -1;
-            j++;
-        	mark = 0;
-		}
+		stack->astack[stackk] = ft_atoi(argv[count]);
 		count++;
 		stackk--;
-        j = 0; 
     }
-	if (doublechecker(stack->astack))
+	if (doublechecker(stack->astack, stack))
+	{
+		printf("erraten\n");
+		    if (stack) {
+        int i = stack->atop;
+        while (stack->astack[i]) {
+            printf("%d\n", stack->astack[i]);
+            i--;
+        }
+    }
 		rid(stack);
-
-	normalizer(stack);
+	}normalizer(stack);
 }
 
 t_stack *stopfer(char **argv) {
@@ -673,6 +741,9 @@ t_stack *stopfer(char **argv) {
     stack->atop = i - 1; 
     stack->btop = -1; 
     stack->size = i;
+		if (stack) {
+		int i = 0;
+	}
     stabler(stack, argv, i);
     return stack;
 }
@@ -689,8 +760,6 @@ t_stack *stopfer(char **argv) {
 			five(stack);
 		else
 		{
-			printf("geht rein");
-
 			radix(stack);
 		}
 		return 1;	
@@ -709,36 +778,36 @@ t_stack *stopfer(char **argv) {
     t_stack *stack;
 	stack = stopfer(argv);
 
-    if (stack) {
-        int i = stack->atop;
-        while (stack->astack[i]) {
-            printf("%d\n", stack->astack[i]);
-            i--;
-        }
-    }
+    // if (stack) {
+    //     int i = stack->atop;
+    //     while (stack->astack[i]) {
+    //         printf("%d\n", stack->astack[i]);
+    //         i--;
+    //     }
+    // }
 
-	if(asorted(stack))
-	{
-		printf("already asorted\n");
-		return 0;
-	}
-	else
+	// if(asorted(stack))
+	// {
+	// 	printf("already asorted\n");
+	// 	return 0;
+	// }
+	// else
 		sorter(stack);
 
-	printf("\n");
+	// printf("\n");
 
-    if (stack) {
-        int i = stack->atop;
-        while (stack->astack[i]) {
-            printf("%d\n", stack->astack[i]);
-            i--;
-        }
-    }
+    // if (stack) {
+    //     int i = stack->atop;
+    //     while (stack->astack[i]) {
+    //         printf("%d\n", stack->astack[i]);
+    //         i--;
+    //     }
+    // }
 
-	if(asorted(stack))
-		printf("sorted\n");
-	else
-		printf("fail\n");
+	// if(asorted(stack))
+	// 	printf("sorted\n");
+	// else
+	// 	printf("fail\n");
 
     return 0;
 }

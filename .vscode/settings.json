@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "algorithm": "c",
+        "cstdlib": "c",
+        "array": "c",
+        "bitset": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "regex": "c",
+        "utility": "c",
+        "chrono": "cpp"
+    }
+}
