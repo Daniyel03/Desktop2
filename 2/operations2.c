@@ -6,7 +6,7 @@
 /*   By: dscholz <dscholz@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:35:39 by dscholz           #+#    #+#             */
-/*   Updated: 2023/11/17 17:35:39 by dscholz          ###   ########.fr       */
+/*   Updated: 2023/11/30 18:38:11 by dscholz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ra(t_stack *stack)
 	int	temp2;
 	int	count;
 
-	printf("ra\n");
+	ft_printf("ra\n");
 	count = stack->atop;
 	if (stack->atop < 1)
 		return (0);
@@ -39,7 +39,7 @@ int	rb(t_stack *stack)
 	int	temp2;
 	int	count;
 
-	printf("rb\n");
+	ft_printf("rb\n");
 	count = stack->btop;
 	if (stack->btop < 1)
 		return (0);
@@ -56,7 +56,7 @@ int	rb(t_stack *stack)
 
 int	rr(t_stack *stack)
 {
-	printf("rr\n");
+	ft_printf("rr\n");
 	if (stack->atop < 1 || stack->btop < 1)
 		return (0);
 	rb(stack);
@@ -70,7 +70,7 @@ int	rra(t_stack *stack)
 	int	temp2;
 	int	count;
 
-	printf("rra\n");
+	ft_printf("rra\n");
 	count = 0;
 	if (stack->atop < 1)
 		return (0);
@@ -91,7 +91,7 @@ int	rrb(t_stack *stack)
 	int	temp2;
 	int	count;
 
-	printf("rrb\n");
+	ft_printf("rrb\n");
 	count = 0;
 	if (stack->btop < 1)
 		return (0);

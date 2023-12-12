@@ -6,13 +6,13 @@
 /*   By: dscholz <dscholz@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:53:44 by dscholz           #+#    #+#             */
-/*   Updated: 2023/11/17 22:18:51 by dscholz          ###   ########.fr       */
+/*   Updated: 2023/11/30 18:34:03 by dscholz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-size_t	ft_strlen(const char *str)
+int	ft_strlen(const char *str)
 {
 	int	len;
 

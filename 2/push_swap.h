@@ -1,17 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dscholz <dscholz@student.42vienna.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/30 17:03:06 by dscholz           #+#    #+#             */
+/*   Updated: 2023/12/10 14:28:20 by dscholz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdarg.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdarg.h>
+# include "/nfs/homes/dscholz/ps/Desktop2/2/ft_printf/ft_printf.h"
 
 typedef struct s_stack {
-    int *astack;
-	int *bstack;
-	int atop;
-	int btop;
-    int size;
-} t_stack;
+	int	*astack;
+	int	*bstack;
+	int	atop;
+	int	btop;
+	int	size;
+}	t_stack;
 
 int			asorted(t_stack *stack);
 int			bsorted(t_stack *stack);
@@ -48,10 +61,12 @@ void		normalizer(t_stack *stack);
 int			ft_atoi(const char *str);
 void		stabler(t_stack *stack, char **argv);
 t_stack		*stopfer(char **argv);
-size_t		ft_strlen(const char *str);
 char		*ft_strdup(const char *s);
 char		**notsplit(char **s, int argc);
 int			ft_strcmp(int s1, int s2);
 int			*cpyarr(int *arr, int *cpy, int count);
+int			*comp(t_stack *stack, int *cpy, int i, int j);
+char	*ft_itoa(int n);
+// int mmax(int argc, char **argv);
 
 #endif

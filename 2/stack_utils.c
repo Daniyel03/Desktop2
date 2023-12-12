@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dscholz <dscholz@student.42vienna.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/30 17:07:38 by dscholz           #+#    #+#             */
+/*   Updated: 2023/11/30 18:39:15 by dscholz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void	rid(t_stack *stack)
@@ -5,7 +17,7 @@ void	rid(t_stack *stack)
 	free(stack->astack);
 	free(stack->bstack);
 	free(stack);
-	printf("ne diggah\n");
+	ft_printf("ne diggah\n");
 	exit(EXIT_FAILURE);
 }
 
@@ -41,7 +53,7 @@ void	ft_bswap(t_stack *stack)
 
 int	rrr(t_stack *stack)
 {
-	printf("rrr\n");
+	ft_printf("rrr\n");
 	if (stack->atop < 1 || stack->btop < 1)
 		return (0);
 	rrb(stack);

@@ -6,7 +6,7 @@
 /*   By: dscholz <dscholz@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:37:18 by dscholz           #+#    #+#             */
-/*   Updated: 2023/11/17 22:24:02 by dscholz          ###   ########.fr       */
+/*   Updated: 2023/11/30 17:52:33 by dscholz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,12 @@ void	norm(t_stack *stack, int *sorted)
 	cpy = NULL;
 }
 
-void normalizer(t_stack *stack)
-{	
-	int i = 0;
-	int j = 0;
-	int tmp = 0;
-	int *cpy = malloc(sizeof(int) * stack->size);
-	if (!cpy)
-	{
-		free(cpy);
-		rid(stack);
-	}
-	cpy = cpyarr(stack->astack, cpy, stack->size);
-	while (i < (stack->size - 1))		// bubble sort
+int	*comp(t_stack *stack, int *cpy, int i, int j)
+{
+	int	tmp;
+
+	tmp = 0;
+	while (i < (stack->size - 1))
 	{
 		j = (i + 1);
 		while (j < stack->size)
@@ -67,40 +60,35 @@ void normalizer(t_stack *stack)
 		}
 		i++;
 	}
+	return (cpy);
+}
 
+void	normalizer(t_stack *stack)
+{
+	int	i;
+	int	j;
+	int	*cpy;
+
+	i = 0;
+	j = 0;
+	cpy = malloc(sizeof(int) * stack->size);
+	if (!cpy)
+	{
+		free(cpy);
+		rid(stack);
+	}
+	cpy = cpyarr(stack->astack, cpy, stack->size);
+	cpy = comp(stack, cpy, i, j);
 	norm(stack, cpy);
 	free(cpy);
 	cpy = NULL;
-}
-
-int	ft_atoi(const char *str)
-{
-	int	res;
-	int	op;
-
-	res = 0;
-	op = 1;
-	while ((*str >= 9 && *str <= 13) || *str == 32)
-		str++;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			op = op * -1;
-		str++;
-	}
-	while (*str >= '0' && *str <= '9')
-	{
-		res = res * 10;
-		res = res + (*str - 48);
-		str++;
-	}
-	return (op * res);
 }
 
 void	stabler(t_stack *stack, char **argv)
 {
 	int	count;
 	int	stackk;
+	int	i;
 
 	count = 0;
 	stackk = (stack->size - 1);
@@ -110,7 +98,7 @@ void	stabler(t_stack *stack, char **argv)
 		count++;
 		stackk--;
 	}
-	int i = 0;
+	i = 0;
 	while (argv[i] != NULL)
 	{
 		free(argv[i]);

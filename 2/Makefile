@@ -1,23 +1,24 @@
 NAME = push_swap
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-SOURCES = five_less.c \ operations.c \ operations2.c \ radix.c \ split.c \ stack_utils.c \ stack.c \ utils.c \ main.c
-
+SOURCES = five_less.c \ operations.c \ operations2.c \ radix.c \ split.c \ stack_utils.c \ stack.c \ utils.c \ itoa.c \ main.c
+PRINTF = ft_printf/libftprintf.a
 OBJS = $(SOURCES:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+	make -C ft_printf
+	$(CC) $(CFLAGS) -o $@ $^ $(PRINTF)
+
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean:
-	@rm -f $(OBJS)
+	@rm -f $(OBJS) $(PRINTF)
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(PRINTF)
 
 re: fclean all
-
